@@ -1,0 +1,36 @@
+1.	Create a Directory for Pig
+sudo mkdir /usr/lib/pig
+
+2.	Copy setup file in directory and extract it
+sudo cp /home/hadoop/Desktop/Softwares/pig-0.11.1.tar.gz /usr/lib/pig
+cd /usr/lib/pig
+sudo tar -xzf pig-0.11.1.tar.gz
+
+3.	Edit bashrc file
+sudo gedit ~/.bashrc
+Add the following lines
+export PIG_HOME="/usr/lib/pig/pig-0.11.1"
+export PIG_CONF_DIR="$PIG_HOME/conf"
+export PIG_CLASSPATH="$PIG_CONF_DIR"
+export PATH="$PIG_HOME/bin:$PATH"
+
+4.	Edit Profile file
+sudo gedit /etc/profile
+Add the line
+export PATH=pig-0.11.1/bin:$PATH
+
+5.	Source the profile file
+source /etc/profile
+
+6.	Change the permission of Pig Directory 
+sudo chmod 777 /usr/lib/pig
+7.	Start Pig
+pig -x local
+
+8.	Execute the following commands
+lines = LOAD '/home/hadoop/Desktop/Data/Small/War_and_Peace.txt' AS (line:chararray);
+words = FOREACH lines GENERATE FLATTEN(TOKENIZE(line)) as word;
+grouped = GROUP words by word;
+wordcount = FOREACH grouped GENERATE group, COUNT(words);
+DUMP wordcount;
+
